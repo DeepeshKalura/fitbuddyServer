@@ -1,22 +1,20 @@
 from fastapi import FastAPI
-from .database import engine
-from app import model
-from .router import post, user, auth
-from .config import settings
+
+# from .database import engine
+from .router import post, user, auth, votes
+from .router import cors
 
 
 # from fastapi.params import Body
-model.Base.metadata.create_all(bind=engine)
+# model.Base.metadata.create_all(bind=engine)
+# ! This is not needed anymore, because we are using alembic for migrations
 app = FastAPI()
 
-print(settings.DATABASE_NAME)
-print("/n/n/n/n/n/n/n/n/n/n/n/n")
-print(settings.DATABASE_USERNAME)
-print(settings.DATABASE_PASSWORD)
-
+cors.add_cors(app)
 app.include_router(post.router)
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(votes.router)
 
 
 @app.get("/", tags=["Root"])
