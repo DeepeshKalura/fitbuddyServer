@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from typing import Literal
+from pydantic import BaseModel, EmailStr, conint
 
 
 class UserOut(BaseModel):
@@ -29,6 +30,11 @@ class Post(PostBase):
     created_at: datetime
     owner_id: int
     owner: UserOut
+
+
+class PostOut(BaseModel):
+    Post: Post
+    votes: int
 
     class Config:
         from_attributes = True
@@ -69,3 +75,11 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+
+# ! For vote
+
+
+class Vote(BaseModel):
+    post_id: int
+    dir: Literal[0, 1]  # Restricts dir to only be 0 or 1
